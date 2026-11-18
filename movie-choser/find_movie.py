@@ -1,4 +1,25 @@
+"""
+Movie recommendation system based on user ratings and clustering. Created by Nikifor Koseda and Mateusz Aftanas
 
+To use it install the required dependencies and provide a JSON file named "ratings.json" with the following structure:
+
+{
+    "user1": {
+        "movie1": rating,
+        "movie2": rating,
+        ...
+    },
+    "user2": {
+        "movie1": rating,
+        "movie3": rating,
+        ...
+    },
+
+    ...
+}
+
+After that choose method of clustering. Hierarchical clustering is more accurate but K-means is faster. Then enter a username to get movie recommendations based on the ratings of similar users.
+"""
 import json
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -219,7 +240,9 @@ elif choice == "2":
     plt.grid()
     plt.show()
 
-# --- RECOMMENDATIONS AND ANTI-RECOMMENDATIONS ---
+# ==========================================
+# 8. RECOMMENDATION
+# ==========================================
 
 user = input("Enter username: ")
 
@@ -250,6 +273,11 @@ else:
 
         return movie_ratings
 
+    # Function that returns the score of a movie for sorting
+    def get_movie_score(movie_and_score):
+        _movie, score = movie_and_score
+        return score
+    
     # First, try users from the same cluster
     recommendations = collect_ratings(similar_users)
 
@@ -271,7 +299,7 @@ else:
         # Sort from highest to lowest
         sorted_movies = sorted(
             movie_scores.items(),
-            key=lambda x: x[1],
+            key=get_movie_score,
             reverse=True
         )
 
